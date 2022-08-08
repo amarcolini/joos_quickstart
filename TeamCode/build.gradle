@@ -22,4 +22,5 @@ android {
 dependencies {
     implementation project(':FtcRobotController')
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+    annotationProcessor "com.amarcolini.joos.command:annotation:0.4.8"
 }
