@@ -5,25 +5,24 @@ import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
+import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
 @TeleOp(group = "Tuning")
 public class ForwardPushTest extends CommandOpMode {
     @Register
     private SampleRobot robot;
 
-    private double getTicks() {
-        return robot.drive.motorGroup.getCurrentPosition();
-    }
-
     @Override
     public void preInit() {
-        final double initTicks = getTicks();
+        final TuningData data = new TuningData(robot.drive);
+        assert data.forwardTicks != null : "This drive does not support this test.";
+        final double initTicks = data.forwardTicks.getAsDouble();
 
         robot.drive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         robot.drive.setDrivePower(new Pose2d());
 
         schedule(true, () -> {
-            double ticks = getTicks() - initTicks;
+            double ticks = data.forwardTicks.getAsDouble() - initTicks;
             telem.addData("Forward Encoder Ticks", ticks);
         });
     }

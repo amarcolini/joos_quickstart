@@ -69,11 +69,7 @@ public class ManualFeedforwardTuner extends CommandOpMode {
         loggingCommand.runBlocking();
 
         schedule(tuningCommand, loggingCommand);
-        map(gamepad((p1, p2) ->
-                p1.y.or(p1.triangle)::isJustActivated
-        ), resettingCommand);
-        map(gamepad((p1, p2) ->
-                p1.b.or(p1.circle)::isJustActivated
-        ), resettingCommand);
+        map(gamepad().p1.y0::isJustActivated, resettingCommand);
+        map(gamepad().p1.b0::isJustActivated, resettingCommand);
     }
 }

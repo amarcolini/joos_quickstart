@@ -4,10 +4,10 @@ import com.amarcolini.joos.command.Robot;
 import com.amarcolini.joos.hardware.IMUAngleSensor;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.MotorGroup;
-import com.amarcolini.joos.localization.AngleSensor;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import kotlin.Pair;
 
+//TODO: change all IDs to what they are in your robot configuration
 public class SampleRobot extends Robot {
     public final IMUAngleSensor headingSensor = new IMUAngleSensor(
             hMap, "imu",
@@ -15,7 +15,6 @@ public class SampleRobot extends Robot {
             RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
     );
 
-    //TODO: change all IDs to what they are in your robot configuration
     public final SampleMecanumDrive drive = new SampleMecanumDrive(
             new MotorGroup(
                     hMap,

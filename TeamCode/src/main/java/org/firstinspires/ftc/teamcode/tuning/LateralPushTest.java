@@ -6,6 +6,7 @@ import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
+import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
 import java.util.List;
 
@@ -14,22 +15,17 @@ public class LateralPushTest extends CommandOpMode {
     @Register
     private SampleRobot robot;
 
-    private double getTicks() {
-        List<Integer> positions = robot.drive.motorGroup.getPositions();
-        return 0.25 * (-positions.get(0) + positions.get(1) - positions.get(2) + positions.get(3));
-    }
-
     @Override
     public void preInit() {
-        assert robot.drive instanceof AbstractMecanumDrive : "This test is only useful for mecanum drives.";
-
-        double initTicks = getTicks();
+        final TuningData data = new TuningData(robot.drive);
+        assert data.lateralTicks != null : "This drive does not support this test.";
+        double initTicks = data.lateralTicks.getAsDouble();
 
         robot.drive.setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         robot.drive.setDrivePower(new Pose2d());
 
         schedule(true, () -> {
-            double ticks = getTicks() - initTicks;
+            double ticks = data.lateralTicks.getAsDouble() - initTicks;
             telem.addData("Lateral Encoder Ticks", ticks);
         });
     }

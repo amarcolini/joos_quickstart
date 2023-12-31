@@ -10,6 +10,7 @@ import com.amarcolini.joos.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.tuning.util.EncoderData;
+import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,13 +31,8 @@ public class EncoderPositionTuner extends CommandOpMode {
 
     @Override
     public void preInit() {
-        List<EncoderData> encoders = Arrays.asList(
-                new EncoderData("leftMotors", Angle.deg(0), () -> robot.drive.leftMotors.getDistance()),
-                new EncoderData("rightMotors", Angle.deg(0), () -> robot.drive.rightMotors.getDistance())
-//                new EncoderData("left", leftVels, Drivetrain.leftPose.heading),
-//                new EncoderData("right", rightVels, Drivetrain.rightPose.heading),
-//                new EncoderData("perp", perpVels, Drivetrain.perpPose.heading)
-        );
+        List<EncoderData> encoders = new TuningData(robot.drive).encoders;
+        assert !encoders.isEmpty() : "This drive does not support this test.";
 
         new SequentialCommand(true, Command.of(() ->
                 robot.drive.setDrivePower(

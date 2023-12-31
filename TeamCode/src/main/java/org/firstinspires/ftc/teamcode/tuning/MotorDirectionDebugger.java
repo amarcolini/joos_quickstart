@@ -17,10 +17,10 @@ public class MotorDirectionDebugger extends CommandOpMode {
     @Override
     public void preInit() {
         List<Function<GamepadEx, Boolean>> buttonMap = Arrays.asList(
-                (p1) -> p1.x.or(p1.square).isActive(),
-                (p1) -> p1.a.or(p1.cross).isActive(),
-                (p1) -> p1.b.or(p1.circle).isActive(),
-                (p1) -> p1.y.or(p1.triangle).isActive()
+                (p1) -> p1.x0.isActive(),
+                (p1) -> p1.a0.isActive(),
+                (p1) -> p1.b0.isActive(),
+                (p1) -> p1.y0.isActive()
         );
 
         schedule(true, () -> {
