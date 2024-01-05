@@ -11,6 +11,7 @@ import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.MotorGroup;
 import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
 import com.amarcolini.joos.hardware.drive.MecanumDrive;
+import com.amarcolini.joos.hardware.drive.Standard3WheelLocalizer;
 import com.amarcolini.joos.localization.AngleSensor;
 import com.amarcolini.joos.trajectory.constraints.MecanumConstraints;
 import com.amarcolini.joos.trajectory.constraints.TrajectoryConstraints;
