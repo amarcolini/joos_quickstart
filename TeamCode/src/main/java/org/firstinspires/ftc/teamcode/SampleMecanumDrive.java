@@ -42,8 +42,8 @@ public class SampleMecanumDrive extends MecanumDrive implements DriveTrajectoryF
     public static double distancePerTick = 1.0;
 
     //TODO: Uncomment if using 3-wheel odometry
-//    public static double lateralDistance = 0.0;
-//    public static double forwardOffset = 0.0;
+//    public static double lateralDistance = 1.0;
+//    public static double forwardOffset = 1.0;
 
     public SampleMecanumDrive(MotorGroup motors, AngleSensor headingSensor) {
         super(motors, trackWidth, trackWidth, lateralMultiplier, headingSensor);
@@ -53,7 +53,7 @@ public class SampleMecanumDrive extends MecanumDrive implements DriveTrajectoryF
         //TODO: Uncomment if using 3-wheel odometry
 //        setLocalizer(new Standard3WheelLocalizer(
 //                motors.get(0).encoder, //Change each index to match your hardware configuration
-//                motors.get(1).encoder.reversed(), //Use .reversed() as needed
+//                motors.get(1).encoder, //Use .reversed() as needed
 //                motors.get(2).encoder,
 //                lateralDistance,
 //                forwardOffset

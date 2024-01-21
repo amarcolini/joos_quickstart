@@ -19,10 +19,10 @@ public class SampleRobot extends Robot {
             new MotorGroup(
                     hMap,
                     Motor.Type.GOBILDA_312,
-                    new Pair<>("back_left", false), // TODO: Change from false to true to reverse each motor as necessary
-                    new Pair<>("back_left", false),
-                    new Pair<>("back_left", false),
-                    new Pair<>("back_left", false)
+                    new Pair<>("front_left", true), // TODO: Change from false to true to reverse each motor as necessary
+                    new Pair<>("back_left", true),
+                    new Pair<>("back_right", false),
+                    new Pair<>("front_right", false)
             ),
             headingSensor
     );

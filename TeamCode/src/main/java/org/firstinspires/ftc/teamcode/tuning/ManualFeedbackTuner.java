@@ -36,5 +36,8 @@ public class ManualFeedbackTuner extends CommandOpMode {
                 robot.drive.followTrajectory(backwardTrajectory),
                 new WaitCommand(0.5)
         ).repeatForever().schedule();
+
+        DashboardUtil robotDrawer = new DashboardUtil(robot.drive);
+        schedule(robotDrawer::update);
     }
 }

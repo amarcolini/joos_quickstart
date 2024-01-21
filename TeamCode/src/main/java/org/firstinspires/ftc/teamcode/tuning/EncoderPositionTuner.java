@@ -36,19 +36,14 @@ public class EncoderPositionTuner extends CommandOpMode {
 
         new SequentialCommand(true, Command.of(() ->
                 robot.drive.setDrivePower(
-                        new Pose2d(0, 0, Angle.rad(-gamepad().p1.getLeftStick().x))
+                        new Pose2d(0, 0, Angle.rad(-gamepad().p1.getRightStick().x))
                 )
         ).runUntil(gamepad((p1, p2) -> p1.a.or(p1.cross))::isActive), Command.of(() -> {
-//            telem.addData("heading", angVels).setRetained(true);
-//            telem.addData("left", leftVels).setRetained(true);
-//            telem.addData("right", rightVels).setRetained(true);
-//            telem.addData("perp", perpVels).setRetained(true);
-//            telem.update();
             Angle theta = Angle.circle.times(totalTurns);
             for (EncoderData encoder : encoders) {
                 double solution = encoder.encoder.getAsDouble() / theta.radians();
                 Vector2d pos = new Vector2d(solution * encoder.phi.sin(), -solution * encoder.phi.cos());
-                telem.addData(encoder.name + " solution", solution).setRetained(true);
+//                telem.addData(encoder.name + " solution", solution).setRetained(true);
                 telem.addData(encoder.name + " pos", pos).setRetained(true);
             }
         })).onEnd((interrupted) -> {

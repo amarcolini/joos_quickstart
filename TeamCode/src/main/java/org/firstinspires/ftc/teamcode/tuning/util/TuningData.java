@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.DoubleSupplier;
+import java.util.function.Function;
 
 public class TuningData {
     public final Drive drive;
@@ -27,20 +28,20 @@ public class TuningData {
         if (localizer instanceof MecanumLocalizer) {
             MecanumLocalizer mecanumLocalizer = (MecanumLocalizer) localizer;
             forwardTicks = () -> {
-                List<Double> wheelPositions = mecanumLocalizer.wheelPositions.invoke();
+                List<Double> wheelPositions = mecanumLocalizer.getWheelPositions.invoke();
                 return (wheelPositions.get(0) + wheelPositions.get(1) + wheelPositions.get(2) + wheelPositions.get(3)) / 4;
             };
             lateralTicks = () -> {
-                List<Double> wheelPositions = mecanumLocalizer.wheelPositions.invoke();
+                List<Double> wheelPositions = mecanumLocalizer.getWheelPositions.invoke();
                 return (-wheelPositions.get(0) + wheelPositions.get(1) - wheelPositions.get(2) + wheelPositions.get(3)) / 4;
             };
             encoders = Arrays.asList(
                     new EncoderData("leftMotors", Angle.rad(0), () -> {
-                        List<Double> wheelPositions = mecanumLocalizer.wheelPositions.invoke();
+                        List<Double> wheelPositions = mecanumLocalizer.getWheelPositions.invoke();
                         return (wheelPositions.get(0) + wheelPositions.get(1)) / 2;
                     }),
                     new EncoderData("rightMotors", Angle.rad(0), () -> {
-                        List<Double> wheelPositions = mecanumLocalizer.wheelPositions.invoke();
+                        List<Double> wheelPositions = mecanumLocalizer.getWheelPositions.invoke();
                         return (wheelPositions.get(2) + wheelPositions.get(3)) / 2;
                     })
             );
@@ -54,22 +55,10 @@ public class TuningData {
                     wheelPoses.get(2).heading.epsilonEquals(Angle.deg(90))) {
                 names = new String[]{"leftEnc", "rightEnc", "perpEnc"};
             } else names = new String[]{"enc0", "enc1", "enc2"};
-            forwardTicks = () -> {
-                double ticks = 0;
-                List<Double> encPositions = trackingWheelLocalizer.getWheelPositions();
-                for (int i = 0; i < 3; i++) {
-                    ticks += encPositions.get(i) * wheelPoses.get(i).heading.cos();
-                }
-                return ticks / 3;
-            };
-            lateralTicks = () -> {
-                double ticks = 0;
-                List<Double> encPositions = trackingWheelLocalizer.getWheelPositions();
-                for (int i = 0; i < 3; i++) {
-                    ticks += encPositions.get(i) * wheelPoses.get(i).heading.sin();
-                }
-                return ticks / 3;
-            };
+            forwardTicks = () -> mapTicks(trackingWheelLocalizer.getWheelPositions(),
+                    wheelPoses, (p) -> p.heading.cos());
+            lateralTicks = () -> mapTicks(trackingWheelLocalizer.getWheelPositions(),
+                    wheelPoses, (p) -> p.heading.sin());
             encoders = Arrays.asList(
                     new EncoderData(names[0], wheelPoses.get(0).heading, () -> trackingWheelLocalizer.getWheelPositions().get(0)),
                     new EncoderData(names[1], wheelPoses.get(1).heading, () -> trackingWheelLocalizer.getWheelPositions().get(1)),
@@ -85,22 +74,10 @@ public class TuningData {
                     wheelPoses.get(2).heading.epsilonEquals(Angle.deg(90))) {
                 names = new String[]{"leftEnc", "rightEnc", "perpEnc"};
             } else names = new String[]{"enc0", "enc1", "enc2"};
-            forwardTicks = () -> {
-                double ticks = 0;
-                List<Double> encPositions = trackingWheelLocalizer.getWheelPositions();
-                for (int i = 0; i < 3; i++) {
-                    ticks += encPositions.get(i) * wheelPoses.get(i).heading.cos();
-                }
-                return ticks / 3;
-            };
-            lateralTicks = () -> {
-                double ticks = 0;
-                List<Double> encPositions = trackingWheelLocalizer.getWheelPositions();
-                for (int i = 0; i < 3; i++) {
-                    ticks += encPositions.get(i) * wheelPoses.get(i).heading.sin();
-                }
-                return ticks / 3;
-            };
+            forwardTicks = () -> mapTicks(trackingWheelLocalizer.getWheelPositions(),
+                    wheelPoses, (p) -> p.heading.cos());
+            lateralTicks = () -> mapTicks(trackingWheelLocalizer.getWheelPositions(),
+                    wheelPoses, (p) -> p.heading.sin());
             encoders = Arrays.asList(
                     new EncoderData(names[0], wheelPoses.get(0).heading, () -> trackingWheelLocalizer.getWheelPositions().get(0)),
                     new EncoderData(names[1], wheelPoses.get(1).heading, () -> trackingWheelLocalizer.getWheelPositions().get(1)),
@@ -111,5 +88,20 @@ public class TuningData {
             lateralTicks = null;
             encoders = Collections.emptyList();
         }
+    }
+
+    private double mapTicks(
+            List<Double> encPositions,
+            List<Pose2d> wheelPoses,
+            Function<Pose2d, Double> weightFunction
+    ) {
+        double ticks = 0;
+        double norm = 0;
+        for (int i = 0; i < 3; i++) {
+            double mult = weightFunction.apply(wheelPoses.get(i));
+            ticks += encPositions.get(i) * mult;
+            norm += mult;
+        }
+        return ticks / norm;
     }
 }

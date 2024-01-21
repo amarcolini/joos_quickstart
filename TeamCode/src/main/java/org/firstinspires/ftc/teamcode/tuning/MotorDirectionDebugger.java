@@ -4,11 +4,17 @@ import com.amarcolini.joos.command.CommandOpMode;
 import com.amarcolini.joos.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
+import org.firstinspires.ftc.teamcode.SampleMecanumDrive;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * This OpMode allows you to individually set the power of the first 4 motors of your drivetrain.
+ * The ordering of the motors depends on your drivetrain, but {@link SampleMecanumDrive} has them in this order:
+ * front left, back left, back right, and front right.
+ */
 @TeleOp(group = "Tuning")
 public class MotorDirectionDebugger extends CommandOpMode {
     @Register
@@ -25,9 +31,9 @@ public class MotorDirectionDebugger extends CommandOpMode {
 
         schedule(true, () -> {
             for (int i = 0; i < robot.drive.motorGroup.size(); i++) {
-                robot.drive.motorGroup.get(i).setPower(
-                        buttonMap.get(i).apply(gamepad().p1) ? 1.0 : 0.0
-                );
+                double power = buttonMap.get(i).apply(gamepad().p1) ? 1.0 : 0.0;
+                robot.drive.motorGroup.get(i).setPower(power);
+                telem.addData("motor " + i + " power", power);
             }
         });
     }
