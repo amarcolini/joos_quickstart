@@ -38,7 +38,7 @@ public class EncoderPositionTuner extends CommandOpMode {
                 robot.drive.setDrivePower(
                         new Pose2d(0, 0, Angle.rad(-gamepad().p1.getRightStick().x))
                 )
-        ).runUntil(gamepad((p1, p2) -> p1.a.or(p1.cross))::isActive), Command.of(() -> {
+        ).runUntil(gamepad().p1.a0::isActive), Command.of(() -> {
             Angle theta = Angle.circle.times(totalTurns);
             for (EncoderData encoder : encoders) {
                 double solution = encoder.encoder.getAsDouble() / theta.radians();

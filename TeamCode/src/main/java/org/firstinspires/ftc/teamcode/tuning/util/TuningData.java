@@ -70,18 +70,16 @@ public class TuningData {
             String[] names;
             if (wheelPoses.get(0).heading.epsilonEquals(
                     Angle.deg(0)
-            ) && wheelPoses.get(1).heading.epsilonEquals(Angle.deg(0)) &&
-                    wheelPoses.get(2).heading.epsilonEquals(Angle.deg(90))) {
-                names = new String[]{"leftEnc", "rightEnc", "perpEnc"};
-            } else names = new String[]{"enc0", "enc1", "enc2"};
+            ) && wheelPoses.get(1).heading.epsilonEquals(Angle.deg(90))) {
+                names = new String[]{"parallelEnc", "perpEnc"};
+            } else names = new String[]{"enc0", "enc1"};
             forwardTicks = () -> mapTicks(trackingWheelLocalizer.getWheelPositions(),
                     wheelPoses, (p) -> p.heading.cos());
             lateralTicks = () -> mapTicks(trackingWheelLocalizer.getWheelPositions(),
                     wheelPoses, (p) -> p.heading.sin());
             encoders = Arrays.asList(
                     new EncoderData(names[0], wheelPoses.get(0).heading, () -> trackingWheelLocalizer.getWheelPositions().get(0)),
-                    new EncoderData(names[1], wheelPoses.get(1).heading, () -> trackingWheelLocalizer.getWheelPositions().get(1)),
-                    new EncoderData(names[2], wheelPoses.get(2).heading, () -> trackingWheelLocalizer.getWheelPositions().get(2))
+                    new EncoderData(names[1], wheelPoses.get(1).heading, () -> trackingWheelLocalizer.getWheelPositions().get(1))
             );
         } else {
             forwardTicks = null;

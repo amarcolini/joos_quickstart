@@ -70,6 +70,6 @@ public class ManualFeedforwardTuner extends CommandOpMode {
 
         schedule(tuningCommand, loggingCommand);
         map(gamepad().p1.y0::isJustActivated, resettingCommand);
-        map(gamepad().p1.b0::isJustActivated, resettingCommand);
+        map(gamepad().p1.b0::isJustActivated, tuningCommand);
     }
 }

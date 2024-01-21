@@ -13,7 +13,8 @@ import java.util.function.Function;
 /**
  * This OpMode allows you to individually set the power of the first 4 motors of your drivetrain.
  * The ordering of the motors depends on your drivetrain, but {@link SampleMecanumDrive} has them in this order:
- * front left, back left, back right, and front right.
+ * front left, back left, back right, and front right. These correspond to X, A, B, and Y on the Logitech/Xbox controllers
+ * and their PS4/5 equivalents.
  */
 @TeleOp(group = "Tuning")
 public class MotorDirectionDebugger extends CommandOpMode {
