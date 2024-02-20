@@ -44,14 +44,6 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
         );
     }
 
-    public void setModuleOrientations(
-            List<Angle> moduleOrientations
-    ) {
-        for (int i = 0; i < Math.min(moduleOrientations.size(), modules.size()) - 1; i++) {
-            modules.get(i).setModuleOrientation(moduleOrientations.get(i));
-        }
-    }
-
     @Override
     public void update() {
         for (PIDSwerveModule module : modules) {
