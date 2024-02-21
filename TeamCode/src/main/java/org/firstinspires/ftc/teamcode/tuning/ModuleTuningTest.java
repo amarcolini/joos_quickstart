@@ -8,8 +8,10 @@ import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.geometry.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
+import org.firstinspires.ftc.teamcode.SampleSwerveModule;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @TeleOp
 @JoosConfig
@@ -19,6 +21,7 @@ public class ModuleTuningTest extends CommandOpMode {
 
     public static Angle startAngle = Angle.deg(0);
     public static Angle endAngle = Angle.deg(90);
+    public static double delay = 3.0;
 
     @Override
     public void preInit() {
@@ -29,14 +32,14 @@ public class ModuleTuningTest extends CommandOpMode {
                         startAngle,
                         startAngle
                 ))),
-                new WaitCommand(3.0),
+                new WaitCommand(delay),
                 Command.of(() -> robot.drive.setModuleOrientations(Arrays.asList(
                         endAngle,
                         endAngle,
                         endAngle,
                         endAngle
                 ))),
-                new WaitCommand(3.0)
+                new WaitCommand(delay)
         ).repeatForever().requires(robot.drive).schedule();
     }
 }
