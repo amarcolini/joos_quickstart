@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTrajectoryFollower {
-    public static double trackWidth = 13.0;
-    public static double wheelBase = 13.0;
+    public static double trackWidth = 11.125;
+    public static double wheelBase = 10.375;
     private final List<SampleSwerveModule> modules;
     public final MotorGroup motorGroup;
 

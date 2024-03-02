@@ -7,11 +7,12 @@ import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.hardware.CRServo;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.localization.AngleSensor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.jetbrains.annotations.NotNull;
 
 @JoosConfig
 public class SampleSwerveModule extends PIDSwerveModule {
-    public static final PIDCoefficients coeffs = new PIDCoefficients();
+    public static final PIDCoefficients coeffs = new PIDCoefficients(0.65);
     public final AngleSensor moduleOrientationSensor;
     public final Motor motor;
     public final CRServo servo;
@@ -28,12 +29,12 @@ public class SampleSwerveModule extends PIDSwerveModule {
     }
 
     @Override
-    public void setCorrectedDrivePower(double v) {
-        motor.setPower(v);
+    protected void setCorrectedDrivePower(double v) {
+        motor.internal.setPower(v);
     }
 
     @Override
-    public void setCorrectedWheelVelocity(double v, double v1) {
+    protected void setCorrectedWheelVelocity(double v, double v1) {
         motor.setDistanceVelocity(v, v1);
     }
 
