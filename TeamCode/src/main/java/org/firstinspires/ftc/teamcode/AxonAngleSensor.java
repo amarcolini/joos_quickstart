@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import org.jetbrains.annotations.NotNull;
 
 public class AxonAngleSensor extends AngleSensor {
-    private final Angle offset;
+    public final Angle offset;
     private final AnalogInput input;
     private final boolean reversed;
 
