@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tuning;
 
 import com.amarcolini.joos.command.CommandOpMode;
 import com.amarcolini.joos.gamepad.GamepadEx;
+import com.amarcolini.joos.hardware.MotorGroup;
+import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.SampleMecanumDrive;
@@ -23,6 +25,9 @@ public class MotorDirectionDebugger extends CommandOpMode {
 
     @Override
     public void preInit() {
+        assert robot.drive instanceof DriveComponent : "Drive must have motors!";
+        MotorGroup motors = ((DriveComponent) robot.drive).getMotors();
+
         List<Function<GamepadEx, Boolean>> buttonMap = Arrays.asList(
                 (p1) -> p1.x0.isActive(),
                 (p1) -> p1.a0.isActive(),
@@ -31,9 +36,9 @@ public class MotorDirectionDebugger extends CommandOpMode {
         );
 
         schedule(true, () -> {
-            for (int i = 0; i < robot.drive.motorGroup.size(); i++) {
+            for (int i = 0; i < motors.size(); i++) {
                 double power = buttonMap.get(i).apply(gamepad().p1) ? 1.0 : 0.0;
-                robot.drive.motorGroup.get(i).setPower(power);
+                motors.get(i).setPower(power);
                 telem.addData("motor " + i + " power", power);
             }
         });

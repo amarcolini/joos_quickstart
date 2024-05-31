@@ -5,7 +5,13 @@ import com.amarcolini.joos.command.TimeCommand;
 import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.drive.DriveSignal;
 import com.amarcolini.joos.geometry.Angle;
+import com.amarcolini.joos.geometry.Pose2d;
+import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
+import com.amarcolini.joos.profile.MotionProfile;
+import com.amarcolini.joos.profile.MotionProfileGenerator;
+import com.amarcolini.joos.profile.MotionState;
 import com.amarcolini.joos.trajectory.Trajectory;
+import com.amarcolini.joos.trajectory.TurnSegment;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 
@@ -15,20 +21,25 @@ public class TurnTest extends CommandOpMode {
     @Register
     private SampleRobot robot;
     public static Angle angle = Angle.deg(90);
+    public static Angle maxAngVel = Angle.deg(180);
+    public static Angle maxAngAccel = Angle.deg(180);
 
     public void preInit() {
-        Trajectory trajectory = robot.drive.trajectoryBuilder()
-                .turn(angle)
-                .build();
+        MotionProfile profile = MotionProfileGenerator.generateSimpleMotionProfile(
+                new MotionState(0.0, 0.0, 0.0),
+                new MotionState(angle.radians(), 0.0, 0.0),
+                maxAngVel.radians(), maxAngAccel.radians()
+        );
 
         new TimeCommand((t, dt) -> {
+            MotionState state = profile.get(t);
             robot.drive.setDriveSignal(
                     new DriveSignal(
-                            trajectory.velocity(t),
-                            trajectory.acceleration(t)
+                            new Pose2d(0.0, 0.0, Angle.rad(state.v)),
+                            new Pose2d(0.0, 0.0, Angle.rad(state.a))
                     )
             );
-            return t >= trajectory.duration();
+            return t >= profile.duration();
         }).onEnd((interrupted) -> robot.drive.setDriveSignal(new DriveSignal()))
                 .thenStopOpMode()
                 .schedule();

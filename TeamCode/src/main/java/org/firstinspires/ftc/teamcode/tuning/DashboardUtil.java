@@ -4,15 +4,17 @@ import com.amarcolini.joos.command.CommandScheduler;
 import com.amarcolini.joos.dashboard.SuperTelemetry;
 import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.drive.DriveComponent;
+import com.amarcolini.joos.hardware.drive.DrivePathFollower;
 import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
+import com.amarcolini.joos.path.Path;
 import com.amarcolini.joos.trajectory.Trajectory;
 
 import java.util.ArrayList;
 
 public class DashboardUtil {
-    private final DriveTrajectoryFollower drive;
+    private final DriveComponent drive;
 
-    public DashboardUtil(DriveTrajectoryFollower drive) {
+    public DashboardUtil(DriveComponent drive) {
         this.drive = drive;
     }
 
@@ -25,13 +27,24 @@ public class DashboardUtil {
 
     public void update() {
         SuperTelemetry telem = CommandScheduler.telemetry;
-        Trajectory trajectory = drive.getCurrentTrajectory();
-        if (trajectory != null) {
-            poseHistory.add(drive.getPoseEstimate());
-            if (poseHistoryLimit > -1 && poseHistory.size() > poseHistoryLimit)
-                poseHistory.remove(0);
-            telem.drawSampledTrajectory(trajectory, pathColor, turnColor, waitColor);
-            telem.drawPoseHistory(poseHistory, robotColor);
+        if (drive instanceof DriveTrajectoryFollower) {
+            Trajectory trajectory = ((DriveTrajectoryFollower) drive).getCurrentTrajectory();
+            if (trajectory != null) {
+                poseHistory.add(drive.getPoseEstimate());
+                if (poseHistoryLimit > -1 && poseHistory.size() > poseHistoryLimit)
+                    poseHistory.remove(0);
+                telem.drawSampledTrajectory(trajectory, pathColor, turnColor, waitColor);
+                telem.drawPoseHistory(poseHistory, robotColor);
+            }
+        } else if (drive instanceof DrivePathFollower) {
+            Path path = ((DrivePathFollower) drive).getCurrentPath();
+            if (path != null) {
+                poseHistory.add(drive.getPoseEstimate());
+                if (poseHistoryLimit > -1 && poseHistory.size() > poseHistoryLimit)
+                    poseHistory.remove(0);
+                telem.drawSampledPath(path, pathColor);
+                telem.drawPoseHistory(poseHistory, robotColor);
+            }
         }
         telem.fieldOverlay().setStrokeWidth(1);
         telem.drawRobot(drive.getPoseEstimate(), robotColor);

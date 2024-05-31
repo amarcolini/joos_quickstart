@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
+import android.annotation.SuppressLint;
 import com.amarcolini.joos.command.Command;
 import com.amarcolini.joos.command.CommandOpMode;
 import com.amarcolini.joos.command.SequentialCommand;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @TeleOp(group = "Tuning")
 @JoosConfig
@@ -33,6 +35,7 @@ public class EncoderPositionTuner extends CommandOpMode {
     public void preInit() {
         List<EncoderData> encoders = new TuningData(robot.drive).encoders;
         assert !encoders.isEmpty() : "This drive does not support this test.";
+        telem.addLine(String.format(Locale.US, "Rotate your drive %d times using the right joystick and then press A/X (Xbox/PS).", totalTurns));
 
         new SequentialCommand(true, Command.of(() ->
                 robot.drive.setDrivePower(

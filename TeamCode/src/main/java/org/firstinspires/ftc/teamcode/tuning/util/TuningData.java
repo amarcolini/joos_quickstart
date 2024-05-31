@@ -4,10 +4,7 @@ import androidx.annotation.Nullable;
 import com.amarcolini.joos.drive.Drive;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
-import com.amarcolini.joos.localization.Localizer;
-import com.amarcolini.joos.localization.MecanumLocalizer;
-import com.amarcolini.joos.localization.ThreeTrackingWheelLocalizer;
-import com.amarcolini.joos.localization.TwoTrackingWheelLocalizer;
+import com.amarcolini.joos.localization.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,14 +33,31 @@ public class TuningData {
                 return (-wheelPositions.get(0) + wheelPositions.get(1) - wheelPositions.get(2) + wheelPositions.get(3)) / 4;
             };
             encoders = Arrays.asList(
-                    new EncoderData("leftMotors", Angle.rad(0), () -> {
+                    new EncoderData("leftWheels", Angle.rad(0), () -> {
                         List<Double> wheelPositions = mecanumLocalizer.getWheelPositions.invoke();
                         return (wheelPositions.get(0) + wheelPositions.get(1)) / 2;
                     }),
-                    new EncoderData("rightMotors", Angle.rad(0), () -> {
+                    new EncoderData("rightWheels", Angle.rad(0), () -> {
                         List<Double> wheelPositions = mecanumLocalizer.getWheelPositions.invoke();
                         return (wheelPositions.get(2) + wheelPositions.get(3)) / 2;
                     })
+            );
+        } else if (localizer instanceof TankLocalizer) {
+            TankLocalizer tankLocalizer = (TankLocalizer) localizer;
+            forwardTicks = () -> {
+                List<Double> wheelPositions = tankLocalizer.getWheelPositions.invoke();
+                return (wheelPositions.get(0) + wheelPositions.get(1)) / 2;
+            };
+            lateralTicks = null;
+            encoders = Arrays.asList(
+                    new EncoderData("leftWheels",
+                            Angle.rad(0),
+                            () -> tankLocalizer.getWheelPositions.invoke().get(0)
+                    ),
+                    new EncoderData("rightWheels",
+                            Angle.rad(0),
+                            () -> tankLocalizer.getWheelPositions.invoke().get(1)
+                    )
             );
         } else if (localizer instanceof ThreeTrackingWheelLocalizer) {
             ThreeTrackingWheelLocalizer trackingWheelLocalizer = (ThreeTrackingWheelLocalizer) localizer;

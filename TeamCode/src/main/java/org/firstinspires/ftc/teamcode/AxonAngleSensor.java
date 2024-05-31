@@ -6,9 +6,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 import org.jetbrains.annotations.NotNull;
 
 public class AxonAngleSensor extends AngleSensor {
-    public final Angle offset;
     private final AnalogInput input;
-    private final boolean reversed;
 
     public AxonAngleSensor(
             AnalogInput input,
@@ -16,13 +14,13 @@ public class AxonAngleSensor extends AngleSensor {
             boolean reversed
     ) {
         this.input = input;
-        this.offset = offset;
-        this.reversed = reversed;
+        setReversed(reversed);
+        setOffset(offset);
     }
 
     @NotNull
     @Override
     protected Angle getRawAngle() {
-        return Angle.circle.times(input.getVoltage() / input.getMaxVoltage() * (reversed ? 1 : -1)).plus(offset);
+        return Angle.circle.times(input.getVoltage() / input.getMaxVoltage());
     }
 }

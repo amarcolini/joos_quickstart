@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 @JoosConfig
 public class SampleSwerveModule extends PIDSwerveModule {
-    public static final PIDCoefficients coeffs = new PIDCoefficients(0.65);
+    public static final PIDCoefficients coeffs = new PIDCoefficients(0.0);
     public final AngleSensor moduleOrientationSensor;
     public final Motor motor;
     public final CRServo servo;
@@ -30,7 +30,7 @@ public class SampleSwerveModule extends PIDSwerveModule {
 
     @Override
     protected void setCorrectedDrivePower(double v) {
-        motor.internal.setPower(v);
+        motor.setPower(v);
     }
 
     @Override
