@@ -14,7 +14,7 @@ public class LocalizationTest extends CommandOpMode {
 
     @Override
     public void preInit() {
-        robot.drive.setPoseEstimate(new Pose2d());
+        robot.drive.getLocalizer().setPoseEstimate(new Pose2d());
 
         schedule(true, () -> {
             Vector2d leftStick = gamepad().p1.getLeftStick();
@@ -27,7 +27,7 @@ public class LocalizationTest extends CommandOpMode {
                     )
             );
 
-            telem.drawRobot(robot.drive.getPoseEstimate(), "blue");
+            telem.drawRobot(robot.drive.getLocalizer().getPoseEstimate(), "blue");
         });
     }
 }

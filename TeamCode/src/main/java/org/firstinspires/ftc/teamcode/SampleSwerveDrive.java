@@ -6,20 +6,19 @@ import com.amarcolini.joos.dashboard.Immutable;
 import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.drive.AbstractSwerveDrive;
 import com.amarcolini.joos.drive.PIDSwerveModule;
+import com.amarcolini.joos.drive.SwerveModule;
 import com.amarcolini.joos.followers.HolonomicPIDVAFollower;
 import com.amarcolini.joos.followers.TrajectoryFollower;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
-import com.amarcolini.joos.hardware.CRServo;
-import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.MotorGroup;
 import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
-import com.amarcolini.joos.trajectory.constraints.GenericConstraints;
-import com.amarcolini.joos.trajectory.constraints.MecanumConstraints;
+import com.amarcolini.joos.hardware.drive.FollowTrajectoryCommand;
+import com.amarcolini.joos.trajectory.Trajectory;
 import com.amarcolini.joos.trajectory.constraints.SwerveConstraints;
 import com.amarcolini.joos.trajectory.constraints.TrajectoryConstraints;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.teamcode.tuning.util.DashboardTrajectoryCommand;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 
 @JoosConfig
 public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTrajectoryFollower {
-    // @TODO Update swerve trackwidth/wheelbase to match your drive configuration.
+    //TODO Update swerve trackwidth/wheelbase to match your drive configuration.
     public static double trackWidth = 12.0;
     public static double wheelBase = 12.0;
     private final List<SampleSwerveModule> modules;
@@ -51,7 +50,7 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
             Angle.deg(180.0)
     );
 
-    // @TODO Tune swerve module offsets.
+    //TODO Tune swerve module offsets.
     public static Angle frontLeftOffset = Angle.deg(0);
     public static Angle backLeftOffset = Angle.deg(0);
     public static Angle backRightOffset = Angle.deg(0);
@@ -70,38 +69,34 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
     public SampleSwerveDrive(HardwareMap hMap) {
         this(
                 new SampleSwerveModule(
-                        new AxonAngleSensor(
-                                hMap.get(AnalogInput.class, "front_left_angle"),
-                                frontLeftOffset, false
-                        ),
-                        new Motor(hMap, "front_left_motor", Motor.Type.GOBILDA_MATRIX).reversed(), //Add .reversed() as necessary
-                                        new CRServo(hMap, "front_left_servo")
+                        hMap,
+                        "front_left_motor",
+                        "front_left_servo",
+                        "front_left_angle", frontLeftOffset
                 ),
                 new SampleSwerveModule(
-                        new AxonAngleSensor(
-                                hMap.get(AnalogInput.class, "back_left_angle"),
-                                backLeftOffset, false
-                        ),
-                        new Motor(hMap, "back_left_motor", Motor.Type.GOBILDA_MATRIX).reversed(),
-                        new CRServo(hMap, "back_left_servo")
+                        hMap,
+                        "back_left_motor",
+                        "back_left_servo",
+                        "back_left_angle", backLeftOffset
                 ),
                 new SampleSwerveModule(
-                        new AxonAngleSensor(
-                                hMap.get(AnalogInput.class, "back_right_angle"),
-                                backRightOffset, false
-                        ),
-                        new Motor(hMap, "back_right_motor", Motor.Type.GOBILDA_MATRIX),
-                        new CRServo(hMap, "back_right_servo")
+                        hMap,
+                        "back_right_motor",
+                        "back_right_servo",
+                        "back_right_angle", backRightOffset
                 ),
                 new SampleSwerveModule(
-                        new AxonAngleSensor(
-                                hMap.get(AnalogInput.class, "front_right_angle"),
-                                frontRightOffset, false
-                        ),
-                        new Motor(hMap, "front_right_motor", Motor.Type.GOBILDA_MATRIX),
-                        new CRServo(hMap, "front_right_servo")
+                        hMap,
+                        "front_right_motor",
+                        "front_right_servo",
+                        "front_right_angle", frontRightOffset
                 )
         );
+        //TODO: Reverse motors/servos/angle sensors like this:
+//        modules.get(0).motor.setReversed(true);
+//        modules.get(1).servo.setReversed(true);
+//        modules.get(2).moduleOrientationSensor.setReversed(true);
     }
 
     public SampleSwerveDrive(
@@ -123,19 +118,9 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
 
     @Override
     public void update() {
-        for (PIDSwerveModule module : modules) {
+        for (SwerveModule module : modules) {
             module.update();
         }
-    }
-
-    @Override
-    public void setRunMode(@NotNull Motor.RunMode runMode) {
-        motorGroup.setRunMode(runMode);
-    }
-
-    @Override
-    public void setZeroPowerBehavior(@NotNull Motor.ZeroPowerBehavior zeroPowerBehavior) {
-        motorGroup.setZeroPowerBehavior(zeroPowerBehavior);
     }
 
     @NotNull
@@ -148,5 +133,11 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
     @Override
     public TrajectoryFollower getTrajectoryFollower() {
         return trajectoryFollower;
+    }
+
+    @NotNull
+    @Override
+    public FollowTrajectoryCommand followTrajectory(@NotNull Trajectory trajectory) {
+        return new DashboardTrajectoryCommand(trajectory, trajectoryFollower, this);
     }
 }

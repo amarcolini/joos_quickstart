@@ -8,13 +8,13 @@ import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.geometry.Vector2d;
+import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.tuning.util.EncoderData;
 import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.amarcolini.joos.util.MathUtil.doLinearRegressionNoIntercept;
@@ -36,7 +36,7 @@ public class AngularRampLogger extends CommandOpMode {
     @Override
     public void preInit() {
         ArrayList<Double> angVels = new ArrayList<>();
-        List<EncoderData> encoders = new TuningData(robot.drive).encoders;
+        List<EncoderData> encoders = new TuningData((DriveComponent) robot.drive).encoders;
         assert !encoders.isEmpty() : "This robot does not support this test.";
 
         new SequentialCommand(true, new TimeCommand((t, dt) -> {

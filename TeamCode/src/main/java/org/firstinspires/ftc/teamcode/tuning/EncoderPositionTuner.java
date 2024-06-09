@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
-import android.annotation.SuppressLint;
 import com.amarcolini.joos.command.Command;
 import com.amarcolini.joos.command.CommandOpMode;
 import com.amarcolini.joos.command.SequentialCommand;
@@ -8,12 +7,12 @@ import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.geometry.Vector2d;
+import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.tuning.util.EncoderData;
 import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,16 +23,9 @@ public class EncoderPositionTuner extends CommandOpMode {
     private SampleRobot robot;
     public static int totalTurns = 10;
 
-//    private val headingSensor by getHardware<IMU>("imu").map {
-//        getAngleSensor(
-//                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
-//                RevHubOrientationOnRobot.UsbFacingDirection.UP
-//        )
-//    }
-
     @Override
     public void preInit() {
-        List<EncoderData> encoders = new TuningData(robot.drive).encoders;
+        List<EncoderData> encoders = new TuningData((DriveComponent) robot.drive).encoders;
         assert !encoders.isEmpty() : "This drive does not support this test.";
         telem.addLine(String.format(Locale.US, "Rotate your drive %d times using the right joystick and then press A/X (Xbox/PS).", totalTurns));
 

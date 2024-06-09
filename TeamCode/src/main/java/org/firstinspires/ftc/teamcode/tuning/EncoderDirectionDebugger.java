@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
 import com.amarcolini.joos.command.CommandOpMode;
+import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.tuning.util.EncoderData;
@@ -19,7 +20,7 @@ public class EncoderDirectionDebugger extends CommandOpMode {
 
     @Override
     public void preInit() {
-        final List<EncoderData> encoders = new TuningData(robot.drive).encoders;
+        final List<EncoderData> encoders = new TuningData((DriveComponent) robot.drive).encoders;
         assert !encoders.isEmpty() : "This robot does not support this test.";
 
         schedule(true, () -> {

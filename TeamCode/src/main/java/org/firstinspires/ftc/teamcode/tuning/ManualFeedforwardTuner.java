@@ -9,8 +9,6 @@ import com.amarcolini.joos.geometry.Vector2d;
 import com.amarcolini.joos.profile.MotionProfile;
 import com.amarcolini.joos.profile.MotionProfileGenerator;
 import com.amarcolini.joos.profile.MotionState;
-import com.amarcolini.joos.trajectory.Trajectory;
-import com.amarcolini.joos.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 
@@ -35,7 +33,6 @@ public class ManualFeedforwardTuner extends CommandOpMode {
         MotionProfile back = forward.flipped();
 
         targetVelocity = 0.0;
-        Component component = robot.drive instanceof Component ? (Component) robot.drive : Component.of(() -> {});
         Command tuningCommand = new SequentialCommand(
                 true,
                 new TimeCommand((t, dt) -> {
@@ -52,7 +49,7 @@ public class ManualFeedforwardTuner extends CommandOpMode {
                     return t >= back.duration();
                 }).onEnd((interrupted) -> robot.drive.setDriveSignal(new DriveSignal())),
                 new WaitCommand(0.5)
-        ).repeatForever().requires(component);
+        ).repeatForever().requires(robot.drive);
 
         Command resettingCommand = Command.of(() -> {
             Vector2d leftStick = gamepad().p1.getLeftStick();
@@ -64,10 +61,10 @@ public class ManualFeedforwardTuner extends CommandOpMode {
                             Angle.rad(-rightStick.x)
                     )
             );
-        }).runForever().requires(component);
+        }).runForever().requires(robot.drive);
 
         Command loggingCommand = new InstantCommand(() -> {
-            Pose2d actualVelocity = robot.drive.getPoseVelocity();
+            Pose2d actualVelocity = robot.drive.getLocalizer().getPoseVelocity();
             if (actualVelocity == null) return;
             telem.addData("targetVelocity", targetVelocity);
             telem.addData("actualVelocity", actualVelocity.x);

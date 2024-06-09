@@ -15,11 +15,11 @@ public class ForwardPushTest extends CommandOpMode {
 
     @Override
     public void preInit() {
-        final TuningData data = new TuningData(robot.drive);
+        final TuningData data = new TuningData((DriveComponent) robot.drive);
         assert data.forwardTicks != null : "This drive does not support this test.";
         final double initTicks = data.forwardTicks.getAsDouble();
 
-        if (robot.drive instanceof DriveComponent) ((DriveComponent) robot.drive).setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
+        if (robot.drive instanceof DriveComponent) ((DriveComponent) robot.drive).getMotors().setZeroPowerBehavior(Motor.ZeroPowerBehavior.FLOAT);
         robot.drive.setDrivePower(new Pose2d());
 
         schedule(true, () -> {

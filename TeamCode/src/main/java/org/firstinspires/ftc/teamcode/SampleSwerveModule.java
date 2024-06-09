@@ -7,7 +7,9 @@ import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.hardware.CRServo;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.localization.AngleSensor;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.jetbrains.annotations.NotNull;
 
 @JoosConfig
@@ -26,6 +28,22 @@ public class SampleSwerveModule extends PIDSwerveModule {
         this.moduleOrientationSensor = moduleOrientationSensor;
         this.motor = motor;
         this.servo = servo;
+    }
+
+    public SampleSwerveModule(
+            HardwareMap hMap,
+            String motorId,
+            String servoId,
+            String axonAngleSensorId,
+            Angle axonAngleOffset
+    ) {
+        super(coeffs);
+        this.moduleOrientationSensor = new AxonAngleSensor(
+                hMap.get(AnalogInput.class, axonAngleSensorId),
+                axonAngleOffset, false
+        );
+        this.motor = new Motor(hMap, motorId, Motor.Type.GOBILDA_MATRIX);
+        this.servo = new CRServo(hMap, servoId);
     }
 
     @Override

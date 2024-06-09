@@ -10,11 +10,14 @@ import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.MotorGroup;
 import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
+import com.amarcolini.joos.hardware.drive.FollowTrajectoryCommand;
 import com.amarcolini.joos.hardware.drive.TankDrive;
 import com.amarcolini.joos.localization.AngleSensor;
+import com.amarcolini.joos.trajectory.Trajectory;
 import com.amarcolini.joos.trajectory.constraints.TankConstraints;
 import com.amarcolini.joos.trajectory.constraints.TrajectoryConstraints;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.teamcode.tuning.util.DashboardTrajectoryCommand;
 import org.jetbrains.annotations.NotNull;
 
 @JoosConfig
@@ -64,5 +67,11 @@ public class SampleTankDrive extends TankDrive implements DriveTrajectoryFollowe
     @Override
     public TrajectoryFollower getTrajectoryFollower() {
         return trajectoryFollower;
+    }
+
+    @NotNull
+    @Override
+    public FollowTrajectoryCommand followTrajectory(@NotNull Trajectory trajectory) {
+        return new DashboardTrajectoryCommand(trajectory, trajectoryFollower, this);
     }
 }

@@ -11,17 +11,19 @@ import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.MotorGroup;
 import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
+import com.amarcolini.joos.hardware.drive.FollowTrajectoryCommand;
 import com.amarcolini.joos.hardware.drive.MecanumDrive;
 import com.amarcolini.joos.localization.AngleSensor;
+import com.amarcolini.joos.trajectory.Trajectory;
 import com.amarcolini.joos.trajectory.constraints.MecanumConstraints;
 import com.amarcolini.joos.trajectory.constraints.TrajectoryConstraints;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import org.firstinspires.ftc.teamcode.tuning.util.DashboardTrajectoryCommand;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @JoosConfig
 public class SampleMecanumDrive extends MecanumDrive implements DriveTrajectoryFollower {
-    public static double trackWidth = 18.0;
-    public static double lateralMultiplier = 1.0;
     @Immutable
     public static MecanumConstraints constraints = new MecanumConstraints(
             40.0,
@@ -41,6 +43,8 @@ public class SampleMecanumDrive extends MecanumDrive implements DriveTrajectoryF
     );
     public static final DCMotorFeedforward feedforward = new DCMotorFeedforward();
     public static double distancePerTick = 1.0;
+    public static double lateralDistancePerTick = 1.0;
+    public static double trackWidth = 18.0;
 
     public SampleMecanumDrive(HardwareMap hMap, AngleSensor headingSensor) {
         super(
@@ -50,7 +54,7 @@ public class SampleMecanumDrive extends MecanumDrive implements DriveTrajectoryF
                         new Motor(hMap, "front_left", Motor.Type.GOBILDA_312),
                         new Motor(hMap, "front_left", Motor.Type.GOBILDA_312)
                 ),
-                trackWidth, trackWidth, lateralMultiplier, headingSensor
+                trackWidth, trackWidth, lateralDistancePerTick / distancePerTick, headingSensor
         );
         getMotors().setDistancePerTick(distancePerTick);
         getMotors().setFeedforward(feedforward);
@@ -66,5 +70,11 @@ public class SampleMecanumDrive extends MecanumDrive implements DriveTrajectoryF
     @Override
     public TrajectoryFollower getTrajectoryFollower() {
         return trajectoryFollower;
+    }
+
+    @NotNull
+    @Override
+    public FollowTrajectoryCommand followTrajectory(@NotNull Trajectory trajectory) {
+        return new DashboardTrajectoryCommand(trajectory, trajectoryFollower, this);
     }
 }

@@ -3,17 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.amarcolini.joos.command.Component;
 import com.amarcolini.joos.command.Robot;
 import com.amarcolini.joos.dashboard.JoosConfig;
-import com.amarcolini.joos.drive.Drive;
-import com.amarcolini.joos.geometry.Angle;
-import com.amarcolini.joos.geometry.Pose2d;
-import com.amarcolini.joos.hardware.CRServo;
 import com.amarcolini.joos.hardware.IMUAngleSensor;
-import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.drive.DriveComponent;
-import com.amarcolini.joos.hardware.drive.Standard2WheelLocalizer;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import java.util.List;
 
@@ -35,11 +28,11 @@ public class SampleRobot extends Robot {
 //    public static double perpendicularOffset = 1.0;
 
     //TODO: Change to your specific drivetrain
-    public Drive drive = new SampleMecanumDrive(hMap, headingSensor);
+    public final SampleMecanumDrive drive = new SampleMecanumDrive(hMap, headingSensor);
 
     @Override
     public void init() {
-        if (drive instanceof Component) register((Component) drive);
+        register(drive);
 
         //TODO: Uncomment if using 3-wheel odometry
 //        drive.setLocalizer(new Standard3WheelLocalizer(

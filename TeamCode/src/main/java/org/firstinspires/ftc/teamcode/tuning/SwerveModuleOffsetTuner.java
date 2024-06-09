@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
 import com.amarcolini.joos.command.CommandOpMode;
-import com.amarcolini.joos.command.Component;
 import com.amarcolini.joos.drive.AbstractSwerveDrive;
+import com.amarcolini.joos.drive.Drive;
 import com.amarcolini.joos.drive.PIDSwerveModule;
 import com.amarcolini.joos.drive.SwerveModule;
 import com.amarcolini.joos.geometry.Angle;
+import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.AxonAngleSensor;
 import org.firstinspires.ftc.teamcode.SampleRobot;
-import org.firstinspires.ftc.teamcode.SampleSwerveDrive;
 import org.firstinspires.ftc.teamcode.SampleSwerveModule;
+import org.firstinspires.ftc.teamcode.tuning.util.TuningData;
 
 import java.util.List;
 
@@ -21,9 +21,10 @@ public class SwerveModuleOffsetTuner extends CommandOpMode {
 
     @Override
     public void preInit() {
-        if (robot.drive instanceof Component) unregister((Component) robot.drive);
-        assert robot.drive instanceof AbstractSwerveDrive : "Only swerve drives are allowed";
-        final AbstractSwerveDrive swerve = (AbstractSwerveDrive) robot.drive;
+        unregister(robot.drive);
+        TuningData data = new TuningData((Drive) robot.drive);
+        assert data.drive instanceof AbstractSwerveDrive : "Only swerve drives are allowed";
+        final AbstractSwerveDrive swerve = (AbstractSwerveDrive) data.drive;
         for (SwerveModule module : swerve.getModules()) {
             if (module instanceof PIDSwerveModule) ((PIDSwerveModule) module).setModulePower(0.0);
         }

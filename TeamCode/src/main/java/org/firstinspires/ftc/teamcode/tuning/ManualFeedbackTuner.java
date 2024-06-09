@@ -23,8 +23,7 @@ public class ManualFeedbackTuner extends CommandOpMode {
 
     @Override
     public void preInit() {
-        robot.drive.setPoseEstimate(new Pose2d());
-        DashboardUtil robotDrawer;
+        robot.drive.getLocalizer().setPoseEstimate(new Pose2d());
         if (robot.drive instanceof DriveTrajectoryFollower) {
             DriveTrajectoryFollower follower = (DriveTrajectoryFollower) robot.drive;
             Trajectory forwardTrajectory = follower.trajectoryBuilder(new Pose2d())
@@ -41,7 +40,6 @@ public class ManualFeedbackTuner extends CommandOpMode {
                     follower.followTrajectory(backwardTrajectory),
                     new WaitCommand(0.5)
             ).repeatForever().schedule();
-            robotDrawer = new DashboardUtil(follower);
         } else if (robot.drive instanceof DrivePathFollower) {
             DrivePathFollower follower = (DrivePathFollower) robot.drive;
             Path forwardPath = new PathBuilder(new Pose2d())
@@ -58,9 +56,6 @@ public class ManualFeedbackTuner extends CommandOpMode {
                     follower.followPath(backwardPath),
                     new WaitCommand(0.5)
             ).repeatForever().schedule();
-            robotDrawer = new DashboardUtil(follower);
         } else throw new IllegalStateException("Robot must have a trajectory/path follower!");
-
-        schedule(robotDrawer::update);
     }
 }

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.tuning;
 import com.amarcolini.joos.command.CommandOpMode;
 import com.amarcolini.joos.gamepad.GamepadEx;
 import com.amarcolini.joos.hardware.MotorGroup;
-import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.SampleMecanumDrive;
@@ -25,8 +24,7 @@ public class MotorDirectionDebugger extends CommandOpMode {
 
     @Override
     public void preInit() {
-        assert robot.drive instanceof DriveComponent : "Drive must have motors!";
-        MotorGroup motors = ((DriveComponent) robot.drive).getMotors();
+        MotorGroup motors = robot.drive.getMotors();
 
         List<Function<GamepadEx, Boolean>> buttonMap = Arrays.asList(
                 (p1) -> p1.x0.isActive(),

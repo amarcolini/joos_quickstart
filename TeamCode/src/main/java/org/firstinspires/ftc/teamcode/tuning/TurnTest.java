@@ -6,12 +6,9 @@ import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.drive.DriveSignal;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
-import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
 import com.amarcolini.joos.profile.MotionProfile;
 import com.amarcolini.joos.profile.MotionProfileGenerator;
 import com.amarcolini.joos.profile.MotionState;
-import com.amarcolini.joos.trajectory.Trajectory;
-import com.amarcolini.joos.trajectory.TurnSegment;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 
