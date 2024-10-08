@@ -5,7 +5,6 @@ import com.amarcolini.joos.control.PIDCoefficients;
 import com.amarcolini.joos.dashboard.Immutable;
 import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.drive.AbstractSwerveDrive;
-import com.amarcolini.joos.drive.PIDSwerveModule;
 import com.amarcolini.joos.drive.SwerveModule;
 import com.amarcolini.joos.followers.HolonomicPIDVAFollower;
 import com.amarcolini.joos.followers.TrajectoryFollower;
@@ -93,7 +92,7 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
                         "front_right_angle", frontRightOffset
                 )
         );
-        //TODO: Reverse motors/servos/angle sensors like this:
+        //TODO Reverse motors/servos/angle sensors like this:
 //        modules.get(0).motor.setReversed(true);
 //        modules.get(1).servo.setReversed(true);
 //        modules.get(2).moduleOrientationSensor.setReversed(true);
