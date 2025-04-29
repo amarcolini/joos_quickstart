@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.tuning.util;
 
 import androidx.annotation.Nullable;
+
+import com.amarcolini.joos.command.CommandScheduler;
 import com.amarcolini.joos.drive.Drive;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.drive.*;
+import com.amarcolini.joos.kinematics.MecanumKinematics;
 import com.amarcolini.joos.localization.*;
 
 import java.util.Arrays;
@@ -20,8 +23,16 @@ public class TuningData {
     public final @Nullable DoubleSupplier lateralTicks;
     public final List<EncoderData> encoders;
 
-    public TuningData(DriveComponent drive) {
-        this((Drive) ComponentDrive.from(drive));
+    public TuningData(
+            Drive drive,
+            List<EncoderData> encoders,
+            @Nullable DoubleSupplier forwardTicks,
+            @Nullable DoubleSupplier lateralTicks
+    ) {
+        this.drive = drive;
+        this.encoders = encoders;
+        this.forwardTicks = forwardTicks;
+        this.lateralTicks = lateralTicks;
     }
 
     public TuningData(Drive drive) {

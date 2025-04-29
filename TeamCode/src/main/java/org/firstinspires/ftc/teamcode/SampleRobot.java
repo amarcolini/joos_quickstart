@@ -4,7 +4,6 @@ import com.amarcolini.joos.command.Component;
 import com.amarcolini.joos.command.Robot;
 import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.hardware.IMUAngleSensor;
-import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 

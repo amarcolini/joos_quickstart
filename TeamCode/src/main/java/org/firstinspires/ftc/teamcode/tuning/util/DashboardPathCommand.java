@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.tuning.util;
 
+import static com.amarcolini.joos.command.CommandScheduler.telem;
+
+import com.amarcolini.joos.command.Component;
+import com.amarcolini.joos.command.FollowPathCommand;
+import com.amarcolini.joos.drive.Drive;
 import com.amarcolini.joos.followers.PathFollower;
 import com.amarcolini.joos.geometry.Pose2d;
-import com.amarcolini.joos.hardware.drive.DriveComponent;
-import com.amarcolini.joos.hardware.drive.FollowPathCommand;
 import com.amarcolini.joos.path.Path;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class DashboardPathCommand extends FollowPathCommand {
-    public DashboardPathCommand(@NotNull Path path, @NotNull PathFollower pathFollower, @NotNull DriveComponent driveComponent) {
+public class DashboardPathCommand<T extends Drive & Component> extends FollowPathCommand<T> {
+    public DashboardPathCommand(@NotNull Path path, @NotNull PathFollower pathFollower, @NotNull T driveComponent) {
         super(path, pathFollower, driveComponent);
     }
 

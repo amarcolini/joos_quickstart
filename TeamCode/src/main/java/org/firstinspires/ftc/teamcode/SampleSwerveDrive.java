@@ -11,8 +11,8 @@ import com.amarcolini.joos.followers.TrajectoryFollower;
 import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.MotorGroup;
-import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
-import com.amarcolini.joos.hardware.drive.FollowTrajectoryCommand;
+import com.amarcolini.joos.command.DriveTrajectoryFollower;
+import com.amarcolini.joos.command.FollowTrajectoryCommand;
 import com.amarcolini.joos.trajectory.Trajectory;
 import com.amarcolini.joos.trajectory.constraints.SwerveConstraints;
 import com.amarcolini.joos.trajectory.constraints.TrajectoryConstraints;
@@ -33,7 +33,6 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
     private final MotorGroup motorGroup;
 
     @NotNull
-    @Override
     public MotorGroup getMotors() {
         return motorGroup;
     }
@@ -44,7 +43,7 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
             18.0,
             18.0,
             40.0,
-            40.0,
+            40.0, 40.0,
             Angle.deg(180.0),
             Angle.deg(180.0)
     );
@@ -136,7 +135,7 @@ public class SampleSwerveDrive extends AbstractSwerveDrive implements DriveTraje
 
     @NotNull
     @Override
-    public FollowTrajectoryCommand followTrajectory(@NotNull Trajectory trajectory) {
-        return new DashboardTrajectoryCommand(trajectory, trajectoryFollower, this);
+    public FollowTrajectoryCommand<DriveTrajectoryFollower> followTrajectory(@NotNull Trajectory trajectory) {
+        return new DashboardTrajectoryCommand<>(trajectory, trajectoryFollower, this);
     }
 }

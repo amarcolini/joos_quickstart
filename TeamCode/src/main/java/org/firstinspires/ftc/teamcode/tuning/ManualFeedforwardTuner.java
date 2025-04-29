@@ -69,7 +69,6 @@ public class ManualFeedforwardTuner extends CommandOpMode {
             telem.addData("targetVelocity", targetVelocity);
             telem.addData("actualVelocity", actualVelocity.x);
         }).repeatForever();
-        loggingCommand.runBlocking();
 
         schedule(tuningCommand, loggingCommand);
         map(gamepad().p1.y0::isJustActivated, resettingCommand);

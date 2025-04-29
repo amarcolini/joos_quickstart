@@ -6,7 +6,6 @@ import com.amarcolini.joos.drive.Drive;
 import com.amarcolini.joos.drive.PIDSwerveModule;
 import com.amarcolini.joos.drive.SwerveModule;
 import com.amarcolini.joos.geometry.Angle;
-import com.amarcolini.joos.hardware.drive.DriveComponent;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.SampleRobot;
 import org.firstinspires.ftc.teamcode.SampleSwerveModule;
@@ -22,7 +21,7 @@ public class SwerveModuleOffsetTuner extends CommandOpMode {
     @Override
     public void preInit() {
         unregister(robot.drive);
-        TuningData data = new TuningData((Drive) robot.drive);
+        TuningData data = new TuningData(robot.drive);
         assert data.drive instanceof AbstractSwerveDrive : "Only swerve drives are allowed";
         final AbstractSwerveDrive swerve = (AbstractSwerveDrive) data.drive;
         for (SwerveModule module : swerve.getModules()) {

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.amarcolini.joos.command.DriveTrajectoryFollower;
+import com.amarcolini.joos.command.FollowTrajectoryCommand;
 import com.amarcolini.joos.control.DCMotorFeedforward;
 import com.amarcolini.joos.dashboard.Immutable;
 import com.amarcolini.joos.dashboard.JoosConfig;
@@ -9,8 +11,6 @@ import com.amarcolini.joos.geometry.Angle;
 import com.amarcolini.joos.geometry.Pose2d;
 import com.amarcolini.joos.hardware.Motor;
 import com.amarcolini.joos.hardware.MotorGroup;
-import com.amarcolini.joos.hardware.drive.DriveTrajectoryFollower;
-import com.amarcolini.joos.hardware.drive.FollowTrajectoryCommand;
 import com.amarcolini.joos.hardware.drive.TankDrive;
 import com.amarcolini.joos.localization.AngleSensor;
 import com.amarcolini.joos.trajectory.Trajectory;
@@ -28,7 +28,7 @@ public class SampleTankDrive extends TankDrive implements DriveTrajectoryFollowe
             40.0,
             18.0,
             40.0,
-            40.0,
+            40.0, 40.0,
             Angle.deg(180.0),
             Angle.deg(180.0)
     );
@@ -71,7 +71,7 @@ public class SampleTankDrive extends TankDrive implements DriveTrajectoryFollowe
 
     @NotNull
     @Override
-    public FollowTrajectoryCommand followTrajectory(@NotNull Trajectory trajectory) {
-        return new DashboardTrajectoryCommand(trajectory, trajectoryFollower, this);
+    public FollowTrajectoryCommand<DriveTrajectoryFollower> followTrajectory(@NotNull Trajectory trajectory) {
+        return new DashboardTrajectoryCommand<>(trajectory, trajectoryFollower, this);
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
 import com.amarcolini.joos.command.CommandOpMode;
+import com.amarcolini.joos.command.CommandScheduler;
 import com.amarcolini.joos.command.TimeCommand;
 import com.amarcolini.joos.dashboard.JoosConfig;
 import com.amarcolini.joos.drive.DriveSignal;
@@ -10,6 +11,7 @@ import com.amarcolini.joos.profile.MotionProfile;
 import com.amarcolini.joos.profile.MotionProfileGenerator;
 import com.amarcolini.joos.profile.MotionState;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.SampleRobot;
 
 @TeleOp(group = "Tuning")
@@ -28,17 +30,19 @@ public class TurnTest extends CommandOpMode {
                 maxAngVel.radians(), maxAngAccel.radians()
         );
 
-        new TimeCommand((t, dt) -> {
-            MotionState state = profile.get(t);
-            robot.drive.setDriveSignal(
-                    new DriveSignal(
-                            new Pose2d(0.0, 0.0, Angle.rad(state.v)),
-                            new Pose2d(0.0, 0.0, Angle.rad(state.a))
-                    )
-            );
-            return t >= profile.duration();
-        }).onEnd((interrupted) -> robot.drive.setDriveSignal(new DriveSignal()))
-                .thenStopOpMode()
-                .schedule();
+        schedule(
+                new TimeCommand((t, dt) -> {
+                    MotionState state = profile.get(t);
+                    robot.drive.setDriveSignal(
+                            new DriveSignal(
+                                    new Pose2d(0.0, 0.0, Angle.rad(state.v)),
+                                    new Pose2d(0.0, 0.0, Angle.rad(state.a))
+                            )
+                    );
+                    return t >= profile.duration();
+                })
+                        .onEnd((interrupted) -> robot.drive.setDriveSignal(new DriveSignal()))
+                        .then(CommandScheduler::stopOpMode)
+        );
     }
 }
